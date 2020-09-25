@@ -19,6 +19,7 @@ tikTakBoom = {
 
         this.screenLose = screenLose;
         this.textLose = textLose;
+        
         this.needRightAnswers = 3;
     },
 
@@ -80,6 +81,8 @@ tikTakBoom = {
         if (result === 'lose') {
             screenLose.classList.add('screen__lose__show');
             textLose.classList.add('text__lose__show');
+            let boomSound = new Audio('/sound/Boom.mp3');
+            boomSound.play();
         }
         if (result === 'won') {
             this.gameStatusField.innerText = `Вы выиграли!`;
