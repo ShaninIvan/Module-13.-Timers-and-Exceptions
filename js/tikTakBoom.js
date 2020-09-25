@@ -81,8 +81,8 @@ tikTakBoom = {
     finish(result = 'lose') {
         this.state = 0;
         if (result === 'lose') {
-            screenLose.classList.add('screen__lose__show');
-            textLose.classList.add('text__lose__show');
+            this.screenLose.classList.add('screen__lose__show');
+            this.textLose.classList.add('text__lose__show');
             let boomSound = new Audio('/sound/Boom.mp3');
             boomSound.play();
         }
@@ -91,12 +91,13 @@ tikTakBoom = {
         }
 
         setTimeout(() => {
-            buttonReplay.classList.add('show');
+            this.buttonReplay.classList.add('show');
+            this.textFieldQuestion.innerText = ``;
+            this.textFieldAnswer1.innerText = ``;
+            this.textFieldAnswer2.innerText = ``;
         }, 6000);
 
-        this.textFieldQuestion.innerText = ``;
-        this.textFieldAnswer1.innerText = ``;
-        this.textFieldAnswer2.innerText = ``;
+
 
         console.log(this);
     },
