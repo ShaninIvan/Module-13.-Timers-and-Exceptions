@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap');
+
+body {
+    font-family: 'Share Tech Mono', monospace;
+    background-color: #000;
+    color: #ffffff;
+}
+
+
+.timer-output{
+    width: 200px;
+    background: #222;
+    color: darkred;
+    padding: 16px 8px;
+    font-size: 64px;
+    text-align: center;
+    line-height: 1;
+    user-select: none;
+}
+
+.timer-output-wrapper{
+    width: calc(100% - 24px);
+    height: 320px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding-right: 40px;
+    
+}
+
+.bomb-image{
+    background-image: url(/img/bomb.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin-bottom: 20px;
+}
+
+.screen__lose{
+    position: absolute;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: -2;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(0, 0, 0);
+}
+
+.text__lose{
+    z-index: inherit;
+    font-size: 56px;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    color: rgb(109, 0, 0);
+}
+
+.screen__lose__show{
+    z-index: 2;
+    animation: loseScreen 3s;
+}
+
+.text__lose__show{
+    animation: loseText 5s;
+}
+
+@keyframes loseScreen{
+    0%{
+        background-color: rgba(0, 0, 0, 0);
+    }50%{
+        background-color: rgb(255, 0, 0);
+    }100%{
+        background-color: rgb(0, 0, 0);
+    }
+}
+
+@keyframes loseText{
+    0%{
+        color: rgba(109, 0, 0, 0);
+    }70%{
+        color: rgba(109, 0, 0, 0);
+    }100%{
+        color: rgb(109, 0, 0);
+    }
+}
