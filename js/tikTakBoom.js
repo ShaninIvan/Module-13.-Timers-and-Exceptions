@@ -7,7 +7,7 @@ tikTakBoom = {
         textFieldAnswer1,
         textFieldAnswer2
     ) {
-        this.boomTimer = 10;
+        this.boomTimer = 30;
         this.countOfPlayers = 2;
         this.tasks = JSON.parse(tasks);
 
@@ -19,6 +19,8 @@ tikTakBoom = {
 
         this.screenLose = screenLose;
         this.textLose = textLose;
+
+        this.buttonReplay = buttonReplay;
         
         this.needRightAnswers = 3;
     },
@@ -87,6 +89,10 @@ tikTakBoom = {
         if (result === 'won') {
             this.gameStatusField.innerText = `Вы выиграли!`;
         }
+
+        setTimeout(() => {
+            buttonReplay.classList.add('show');
+        }, 6000);
 
         this.textFieldQuestion.innerText = ``;
         this.textFieldAnswer1.innerText = ``;

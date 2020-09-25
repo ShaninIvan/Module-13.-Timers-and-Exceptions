@@ -6,6 +6,28 @@ body {
     color: #ffffff;
 }
 
+.container{
+    width: 800px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.gameStatus{
+    width: 90%;
+    text-align: center;
+    background-color: rgb(37, 37, 37);
+    padding: 10px 0;
+    border-radius: 5px;
+    border: 2px solid gray;
+}
 
 .timer-output{
     width: 200px;
@@ -16,32 +38,72 @@ body {
     text-align: center;
     line-height: 1;
     user-select: none;
+    z-index: 1;
 }
 
 .timer-output-wrapper{
     width: calc(100% - 24px);
+    margin-top: 50px;
     height: 320px;
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    padding-right: 40px;
     
 }
 
 .bomb-image{
-    background-image: url(/img/bomb.png);
-    background-repeat: no-repeat;
-    background-size: contain;
-    margin-bottom: 20px;
+    position: absolute;
+    width: 100%;
+    z-index: 0;
+}
+
+.questions{
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.question{
+    width: 700px;
+    height: 30px;
+    border-radius: 5px;
+    text-align: center;
+    padding-top: 7px;
+    margin: 10px 0;
+    background-color: rgb(255, 174, 0);
+    border: 2px solid gray;
+    font-size: 20px;
+    font-weight: 700;
+    color: black;
+}
+
+.answer{
+    width: 500px;
+    border-radius: 5px;
+    padding: 7px 0;
+    margin-bottom: 3px;
+    background-color: rgb(32, 170, 27);
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    border: 2px solid gray;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.answer:hover{
+    background-color: #ee8814;
 }
 
 .screen__lose{
     position: absolute;
-    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     z-index: -2;
     top: 0;
     left: 0;
@@ -65,6 +127,28 @@ body {
 
 .text__lose__show{
     animation: loseText 5s;
+}
+
+.button__replay{
+    margin-top: 20px;
+    width: 200px;
+    height: 50px;
+    border: 2px solid gray;
+    border-radius: 5px;
+    transform: scale(0);
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: 700;
+    transition: 1s;
+}
+
+.button__replay:hover{
+    background-color: #ee8814;
+    transition: 0.3s;
+}
+
+.show{
+    transform: scale(1);
 }
 
 @keyframes loseScreen{
