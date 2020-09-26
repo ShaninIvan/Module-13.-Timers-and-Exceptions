@@ -20,7 +20,7 @@ body {
     align-items: center;
 }
 
-.gameStatus{
+.gameStatusBar{
     width: 90%;
     text-align: center;
     background-color: rgb(37, 37, 37);
@@ -69,7 +69,7 @@ body {
     align-items: center;
 }
 
-.question{
+.questions__header{
     width: 700px;
     height: 30px;
     border-radius: 5px;
@@ -83,7 +83,7 @@ body {
     color: black;
 }
 
-.answer{
+.questions__answer{
     width: 500px;
     border-radius: 5px;
     padding: 7px 0;
@@ -97,11 +97,11 @@ body {
     transition: 0.3s;
 }
 
-.answer:hover{
+.questions__answer:hover{
     background-color: #ee8814;
 }
 
-.screen__lose{
+.screen-finish{
     position: absolute;
     display: flex;
     justify-content: center;
@@ -115,24 +115,14 @@ body {
     background-color: rgb(0, 0, 0);
 }
 
-.text__lose{
+.text__finish{
     z-index: inherit;
     font-size: 56px;
     font-family: 'Cinzel', serif;
     font-weight: 700;
-    color: rgb(109, 0, 0);
     display: none;
 }
 
-.screen__lose__show{
-    z-index: 2;
-    animation: loseScreen 3s;
-}
-
-.text__lose__show{
-    animation: loseText 5s;
-    display: block;
-}
 
 .button__replay{
     margin-top: 20px;
@@ -156,6 +146,23 @@ body {
     transform: scale(1);
 }
 
+/* Блок анимаций поражения */
+.screen-finish__lose_show{
+    z-index: 2;
+    animation: loseScreen 3s;
+}
+
+.text__lose_show{
+    animation: loseText 5s;
+    display: block;
+    color: rgb(109, 0, 0);
+}
+
+.text__lose_show::after{
+    content: "YOU DIED";
+}
+
+
 @keyframes loseScreen{
     0%{
         background-color: rgba(0, 0, 0, 0);
@@ -173,5 +180,42 @@ body {
         color: rgba(109, 0, 0, 0);
     }100%{
         color: rgb(109, 0, 0);
+    }
+}
+
+/* Блок анимаций победы */
+
+.screen-finish__win_show{
+    z-index: 2;
+    animation: winScreen 3s;
+    background-color: rgb(117, 204, 156);
+}
+
+.text__win_show{
+    animation: winText 5s;
+    display: block;
+    color: rgb(6, 101, 124);
+}
+
+.text__win_show::after{
+    content: "YOU WIN!";
+}
+
+
+@keyframes winScreen{
+    0%{
+        background-color: rgba(0, 0, 0, 0);
+    }100%{
+        background-color: rgb(117, 204, 156);
+    }
+}
+
+@keyframes winText{
+    0%{
+        color: rgba(109, 0, 0, 0);
+    }70%{
+        color: rgba(109, 0, 0, 0);
+    }100%{
+        color: rgb(6, 101, 124);
     }
 }

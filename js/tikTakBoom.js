@@ -17,8 +17,8 @@ tikTakBoom = {
         this.textFieldAnswer1 = textFieldAnswer1;
         this.textFieldAnswer2 = textFieldAnswer2;
 
-        this.screenLose = screenLose;
-        this.textLose = textLose;
+        this.screenFinish = screenFinish;
+        this.textFinish = textFinish;
 
         this.buttonReplay = buttonReplay;
         
@@ -81,13 +81,16 @@ tikTakBoom = {
     finish(result = 'lose') {
         this.state = 0;
         if (result === 'lose') {
-            this.screenLose.classList.add('screen__lose__show');
-            this.textLose.classList.add('text__lose__show');
-            let boomSound = new Audio('/sound/Boom.mp3');
+            this.screenFinish.classList.add('screen-finish__lose_show');
+            this.textFinish.classList.add('text__lose_show');
+            const boomSound = new Audio('/sound/Boom.mp3');
             boomSound.play();
         }
         if (result === 'won') {
-            this.gameStatusField.innerText = `Вы выиграли!`;
+            this.screenFinish.classList.add('screen-finish__win_show');
+            this.textFinish.classList.add('text__win_show');
+            const winSound = new Audio('/sound/Win.mp3');
+            winSound.play();
         }
 
         setTimeout(() => {

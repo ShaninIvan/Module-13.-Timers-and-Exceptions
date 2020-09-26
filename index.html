@@ -10,9 +10,8 @@
 
 <body>
     <div class="container">
-
         <h1>Тик-так-бум</h1>
-        <div class="gameStatus">
+        <div class="gameStatusBar">
             <span id="gameStatusField">Игра идёт</span>
         </div>
         <div class="timer-output-wrapper">
@@ -23,14 +22,14 @@
         </div>
 
         <div class="questions">
-            <div class="question" id="questionField"></div>
-            <div id="answer1" class="answer"></div>
-            <div id="answer2" class="answer"></div>
+            <div class="questions__header" id="questionField"></div>
+            <div id="answer1" class="questions__answer"></div>
+            <div id="answer2" class="questions__answer"></div>
         </div>
     </div>
 
-    <div class="screen__lose" id="screenLose">
-        <div class="text__lose" id="textLose">YOU DIED</div>
+    <div class="screen-finish" id="screenFinish">
+        <div class="text__finish" id="textFinish"></div>
         <button class="button__replay" id="buttonReplay">Новая игра</button>
     </div>
 
