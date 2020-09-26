@@ -5,18 +5,25 @@ tikTakBoom = {
         gameStatusField,
         textFieldQuestion,
         textFieldAnswer1,
-        textFieldAnswer2
+        textFieldAnswer2,
+        textFieldAnswer3,
+        textFieldAnswer4,
+        textFieldAnswer5
     ) {
         this.boomTimer = 90;
         this.countOfPlayers = 2;
         this.tasks = JSON.parse(tasks);
 
+        this.startGame = startGame;
         this.stopGame = stopGame;
         this.timerField = timerField;
         this.gameStatusField = gameStatusField;
         this.textFieldQuestion = textFieldQuestion;
         this.textFieldAnswer1 = textFieldAnswer1;
         this.textFieldAnswer2 = textFieldAnswer2;
+        this.textFieldAnswer3 = textFieldAnswer3;
+        this.textFieldAnswer4 = textFieldAnswer4;
+        this.textFieldAnswer5 = textFieldAnswer5;
 
         this.screenFinish = screenFinish;
         this.textFinish = textFinish;
@@ -26,6 +33,7 @@ tikTakBoom = {
         this.needRightAnswers = 3;
     },
 
+    
     run() {
         this.state = 1;
 

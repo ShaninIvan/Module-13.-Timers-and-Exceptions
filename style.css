@@ -36,7 +36,7 @@ body {
     height: 0;
     z-index: 2;
     position: absolute;
-    padding: 10px;
+    
     overflow: hidden;
     color: #000;
     background-color: oldlace;
@@ -51,6 +51,11 @@ body {
     grid-template-rows: 7fr 3fr 1fr;
     grid-row-gap: 5px;
     
+}
+
+.screen-start__show{
+    height: 100%;
+    padding: 10px;
 }
 
 .screen-start div{
@@ -87,9 +92,7 @@ body {
     transition: 0.3s;
 }
 
-.screen-start__show{
-    height: 100%;
-}
+
 
 /* Строка состояния */
 .gameStatusBar{

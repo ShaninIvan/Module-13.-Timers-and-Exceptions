@@ -1,5 +1,6 @@
 window.onload = function()
-{
+{   
+    // TODO дописать элементы в init как тут, так и в tikTakBoom.js
     tikTakBoom.init(
         tasks,
         document.querySelector('#timerField'),
@@ -12,4 +13,9 @@ window.onload = function()
         document.querySelector('#answer5'),
     )
     document.querySelector('.screen-start').classList.add('screen-start__show');
+    // TODO перед стартом игры проверять JSON-файл на корректность
+    document.querySelector('#startGame').addEventListener('click', () =>{
+        document.querySelector('.screen-start').classList.remove('screen-start__show');    
+        tikTakBoom.run();
+    });
 }
