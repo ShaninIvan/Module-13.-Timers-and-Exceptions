@@ -106,13 +106,13 @@ tikTakBoom = {
         if (result === 'lose') {
             this.screenFinish.classList.add('screen-finish__lose_show');
             this.textFinish.classList.add('text__lose_show');
-            const boomSound = new Audio('/sound/Boom.mp3');
+            const boomSound = new Audio('./sound/Boom.mp3');
             boomSound.play();
         }
         if (result === 'won') {
             this.screenFinish.classList.add('screen-finish__win_show');
             this.textFinish.classList.add('text__win_show');
-            const winSound = new Audio('/sound/Win.mp3');
+            const winSound = new Audio('./sound/Win.mp3');
             winSound.play();
         }
 
