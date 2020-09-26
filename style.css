@@ -18,7 +18,7 @@ body {
 
 .container{
     width: 800px;
-    position: absolute;
+    position: relative;
     top: 0;
     right: 0;
     bottom: 0;
@@ -30,6 +30,68 @@ body {
     align-items: center;
 }
 
+/* Старт игры */
+.screen-start{
+    width: 100%;
+    height: 0;
+    z-index: 2;
+    position: absolute;
+    padding: 10px;
+    overflow: hidden;
+    color: #000;
+    background-color: oldlace;
+    transition: 0.5s;
+    border-radius: 10px;
+    text-align: center;
+    display: grid;
+    grid-template-areas: 
+    "gameInfo gameInfo"
+    "playersCount timerSet"
+    "buttonStart buttonStart";
+    grid-template-rows: 7fr 3fr 1fr;
+    grid-row-gap: 5px;
+    
+}
+
+.screen-start div{
+    border: 2px solid rgb(90, 0, 0)
+}
+
+.gameInfo{
+    grid-area: gameInfo;
+    padding: 10px;
+}
+
+.playersCount{
+    grid-area: playersCount;
+}
+
+.timerSet{
+    grid-area: timerSet;
+}
+
+.button__start{
+    grid-area: buttonStart;
+    width: 200px;
+    height: 50px;
+    border: 2px solid gray;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 auto;
+}
+
+.button__start:hover{
+    background-color: #1497ee;
+    transition: 0.3s;
+}
+
+.screen-start__show{
+    height: 100%;
+}
+
+/* Строка состояния */
 .gameStatusBar{
     width: 90%;
     text-align: center;
