@@ -54,6 +54,10 @@ body {
     z-index: 1;
 }
 
+.timer-output_red{
+    color: rgb(212, 8, 8);
+}
+
 
 .bomb-image{
     position: absolute;
@@ -88,7 +92,8 @@ body {
     border-radius: 5px;
     padding: 7px 0;
     margin-bottom: 3px;
-    background-color: rgb(32, 170, 27);
+    background-color: rgb(160, 160, 160);
+    color: #000;
     text-align: center;
     font-size: 18px;
     font-weight: 600;

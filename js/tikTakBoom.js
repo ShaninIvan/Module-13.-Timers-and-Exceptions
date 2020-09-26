@@ -7,7 +7,7 @@ tikTakBoom = {
         textFieldAnswer1,
         textFieldAnswer2
     ) {
-        this.boomTimer = 30;
+        this.boomTimer = 15;
         this.countOfPlayers = 2;
         this.tasks = JSON.parse(tasks);
 
@@ -113,6 +113,10 @@ tikTakBoom = {
             sec = (sec >= 10) ? sec : '0' + sec;
             min = (min >= 10) ? min : '0' + min;
             this.timerField.innerText = `${min}:${sec}`;
+
+            if (this.boomTimer <=10){
+                this.timerField.classList.toggle('timer-output_red', true);
+            }
 
             if (this.boomTimer > 0) {
                 setTimeout(
