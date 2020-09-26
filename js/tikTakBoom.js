@@ -7,10 +7,11 @@ tikTakBoom = {
         textFieldAnswer1,
         textFieldAnswer2
     ) {
-        this.boomTimer = 15;
+        this.boomTimer = 90;
         this.countOfPlayers = 2;
         this.tasks = JSON.parse(tasks);
 
+        this.stopGame = stopGame;
         this.timerField = timerField;
         this.gameStatusField = gameStatusField;
         this.textFieldQuestion = textFieldQuestion;
@@ -75,8 +76,12 @@ tikTakBoom = {
         this.textFieldAnswer1.addEventListener('click', answer1 = () => this.turnOff('answer1'));
         this.textFieldAnswer2.addEventListener('click', answer2 = () => this.turnOff('answer2'));
 
+        this.stopGame.addEventListener('click', () => this.finish());
+
         this.currentTask = task;
     },
+
+    
 
     finish(result = 'lose') {
         this.state = 0;
