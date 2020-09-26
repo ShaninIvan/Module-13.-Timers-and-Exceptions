@@ -36,7 +36,6 @@ body {
     height: 0;
     z-index: 2;
     position: absolute;
-    
     overflow: hidden;
     color: #000;
     background-color: oldlace;
@@ -49,7 +48,7 @@ body {
     "playersCount timerSet"
     "buttonStart buttonStart";
     grid-template-rows: 7fr 3fr 1fr;
-    grid-row-gap: 5px;
+    grid-gap: 5px;
     
 }
 
