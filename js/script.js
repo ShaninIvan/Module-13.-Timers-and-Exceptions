@@ -30,8 +30,8 @@ window.onload = function()
 document.querySelector('#startGame').addEventListener('click', () =>{
     document.querySelector('.screen-start').classList.remove('screen-start__show');    
     
-    let players = 2;
-    let timer = 15;
+    let players;
+    let timer;
 
     [...inpRadio].forEach(el =>{
         if ((el.name == "player") && (el.checked == true)){players = parseInt(el.value)}
