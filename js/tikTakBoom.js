@@ -9,17 +9,7 @@
 // TODO У каждого игрока таймер бомбы должен идти отдельно
 
 tikTakBoom = {
-    init(
-        tasks,
-        timerField,
-        gameStatusField,
-        textFieldQuestion,
-        textFieldAnswer1,
-        textFieldAnswer2,
-        textFieldAnswer3,
-        textFieldAnswer4,
-        textFieldAnswer5
-    ) {
+    init() {
 
         this.tasks = JSON.parse(tasks);
 
@@ -27,12 +17,12 @@ tikTakBoom = {
         this.stopGame = stopGame;
         this.timerField = timerField;
         this.gameStatusField = gameStatusField;
-        this.textFieldQuestion = textFieldQuestion;
-        this.textFieldAnswer1 = textFieldAnswer1;
-        this.textFieldAnswer2 = textFieldAnswer2;
-        this.textFieldAnswer3 = textFieldAnswer3;
-        this.textFieldAnswer4 = textFieldAnswer4;
-        this.textFieldAnswer5 = textFieldAnswer5;
+        this.textFieldQuestion = questionField;
+        this.textFieldAnswer1 = answer1;
+        this.textFieldAnswer2 = answer2;
+        this.textFieldAnswer3 = answer3;
+        this.textFieldAnswer4 = answer4;
+        this.textFieldAnswer5 = answer5;
 
         this.screenFinish = screenFinish;
         this.textFinish = textFinish;
