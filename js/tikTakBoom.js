@@ -13,6 +13,9 @@ tikTakBoom = {
 
         this.tasks = JSON.parse(tasks);
 
+        this.playersBar = playersBar;
+        this.players = [];
+
         this.startGame = startGame;
         this.stopGame = stopGame;
         this.timerField = timerField;
@@ -29,13 +32,26 @@ tikTakBoom = {
 
         this.buttonReplay = buttonReplay;
 
-        this.boomSound = new Audio('./sound/Boom.mp3');
-        this.winSound = new Audio('./sound/Win.mp3');
+        this.boomSound = new Audio('../sound/Boom.mp3');
+        this.winSound = new Audio('../sound/Win.mp3');
+        
         
         this.needRightAnswers = 3;
     },
 
-    
+    //Перерисовка панели игроков в соответствии с их состоянием
+    playersBarRefresh(){
+        this.playersBar.innerHTML = "";
+        this.players.forEach(el =>{
+            let newUl = document.createElement("ul");
+            newUl.innerHTML += `${el.name}: `
+            for (let i = 0; i<el.life; i++){
+                newUl.innerHTML += `<li></li>`
+            }
+            this.playersBar.append(newUl);
+        })
+    },
+
     run() {
         this.state = 1;
 
@@ -127,9 +143,12 @@ tikTakBoom = {
             min = (min >= 10) ? min : '0' + min;
             this.timerField.innerText = `${min}:${sec}`;
 
+            //Декоративный эффект, цифры таймера краснеют при 10 sec и меньше
             if (this.boomTimer <=10){
                 this.timerField.classList.toggle('timer-output_red', true);
-            }
+            }else{
+                this.timerField.classList.toggle('timer-output_red', false);
+            };
 
             if (this.boomTimer > 0) {
                 setTimeout(

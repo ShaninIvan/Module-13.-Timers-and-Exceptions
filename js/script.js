@@ -18,16 +18,28 @@ window.onload = function()
 document.querySelector('#startGame').addEventListener('click', () =>{
     document.querySelector('.screen-start').classList.remove('screen-start__show');    
     
-    let players;
+    let playersCount;
     let timer;
 
+    //Применение настроек к игре
     [...inpRadio].forEach(el =>{
-        if ((el.name == "player") && (el.checked == true)){players = parseInt(el.value)}
+        if ((el.name == "player") && (el.checked == true)){playersCount = parseInt(el.value)}
         if ((el.name == "timer") && (el.checked == true)){timer = parseInt(el.value)}
     });
 
-    tikTakBoom.countOfPlayers = players;
+    tikTakBoom.countOfPlayers = playersCount;
     tikTakBoom.boomTimer = timer;
+
+    const players = tikTakBoom.players;
+    for (let i=1; i<=playersCount; i++){
+        const player = {
+            name: `Player ${i}`,
+            life: 3,
+            timer: timer
+        }
+        players.push(player);
+    }
+    tikTakBoom.playersBarRefresh();
     tikTakBoom.run();
 });
 
