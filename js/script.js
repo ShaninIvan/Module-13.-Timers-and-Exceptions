@@ -54,5 +54,5 @@ window.addEventListener('unload', () =>{
 
 //Перезагрузка страницы
 document.querySelector('#buttonReplay').addEventListener('click', () =>{
-    window.location.reload();
+    document.location.reload();
 });

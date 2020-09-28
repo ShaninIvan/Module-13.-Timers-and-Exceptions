@@ -34,6 +34,7 @@ tikTakBoom = {
 
         this.boomSound = new Audio('../sound/Boom.mp3');
         this.winSound = new Audio('../sound/Win.mp3');
+        this.timerSound = new Audio('../sound/Timer.mp3')
         
         
         this.needRightAnswers = 3;
@@ -111,6 +112,7 @@ tikTakBoom = {
 
     finish(result = 'lose') {
         this.state = 0;
+        this.timerSound.pause();
         if (result === 'lose') {
             this.screenFinish.classList.add('screen-finish__lose_show');
             this.textFinish.classList.add('text__lose_show');
@@ -130,12 +132,11 @@ tikTakBoom = {
         }, 6000);
 
 
-
-        console.log(this);
     },
 
     timer() {
         if (this.state) {
+            this.timerSound.play();
             this.boomTimer -= 1;
             let sec = this.boomTimer % 60;
             let min = (this.boomTimer - sec) / 60;
@@ -160,6 +161,8 @@ tikTakBoom = {
             } else {
                 this.finish('lose');
             }
+        }else{
+            this.timerSound.pause();
         }
     },
 }
