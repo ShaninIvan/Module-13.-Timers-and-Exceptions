@@ -29,7 +29,9 @@ tikTakBoom = {
 
         this.boomSound = new Audio('../sound/Boom.mp3');
         this.winSound = new Audio('../sound/Win.mp3');
-        this.timerSound = new Audio('../sound/Timer.mp3')
+        this.timerSound = new Audio('../sound/Timer.mp3');
+        this.correctSound = new Audio('../sound/Correct.mp3');
+        this.ErrorSound = new Audio('../sound/Error.mp3');
 
         this.needRightAnswers = 3;
     },
@@ -73,6 +75,7 @@ tikTakBoom = {
             this.gameStatusField.innerText = 'Верно!';
             this.rightAnswers += 1;
             //При верном ответе добавляется 5 секунд
+            this.correctSound.play();
             this.boomTimer += 5;
             this.timerField.classList.toggle('timer-output_green', true);
             setTimeout(() => {
@@ -81,6 +84,7 @@ tikTakBoom = {
         } else {
             this.gameStatusField.innerText = 'Неверно!';
             //При неправильном ответе отнимается 5 секунд
+            this.ErrorSound.play();
             this.boomTimer -= 5;
             this.timerField.classList.toggle('timer-output_orange', true);
             setTimeout(() => {
@@ -125,6 +129,7 @@ tikTakBoom = {
             node.remove();
         })
 
+        //Размер шрифта вопроса скалируется от длины текста
         const question = task.question
         let fSize = 18;
         console.log(question.length)
@@ -184,7 +189,6 @@ tikTakBoom = {
 
     timer() {
         if (this.state) {
-            this.timerSound.play();
             this.boomTimer -= 1;
             let sec = this.boomTimer % 60;
             let min = (this.boomTimer - sec) / 60;
@@ -202,6 +206,7 @@ tikTakBoom = {
             if (this.boomTimer > 0) {
                 setTimeout(
                     () => {
+                        this.timerSound.play();
                         this.timer()
                     },
                     1000,
@@ -210,7 +215,6 @@ tikTakBoom = {
                 this.finish('lose');
             }
         } else {
-            this.timerSound.pause();
         }
     },
 }
