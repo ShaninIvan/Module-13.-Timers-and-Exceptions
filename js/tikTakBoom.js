@@ -19,12 +19,8 @@ tikTakBoom = {
         this.startGame = startGame;
         this.timerField = timerField;
         this.gameStatusField = gameStatusField;
+        this.questionBlock = questionBlock;
         this.textFieldQuestion = questionField;
-        this.textFieldAnswer1 = answer1;
-        this.textFieldAnswer2 = answer2;
-        this.textFieldAnswer3 = answer3;
-        this.textFieldAnswer4 = answer4;
-        this.textFieldAnswer5 = answer5;
 
         this.screenFinish = screenFinish;
         this.textFinish = textFinish;
@@ -34,7 +30,6 @@ tikTakBoom = {
         this.boomSound = new Audio('../sound/Boom.mp3');
         this.winSound = new Audio('../sound/Win.mp3');
         this.timerSound = new Audio('../sound/Timer.mp3')
-        
         
         this.needRightAnswers = 3;
     },
@@ -74,7 +69,7 @@ tikTakBoom = {
     },
 
     turnOff(value) {
-        if (this.currentTask[value].result) {
+        if (value) {
             this.gameStatusField.innerText = 'Верно!';
             this.rightAnswers += 1;
         } else {
@@ -90,8 +85,6 @@ tikTakBoom = {
             this.finish('won');
         }
 
-        this.textFieldAnswer1.removeEventListener('click', answer1);
-        this.textFieldAnswer2.removeEventListener('click', answer2);
     },
 
     //принимает упорядоченные ответы на входе и возвращает от 2 до 5 перемешанных ответов. Правильный ответ есть всегда.
@@ -102,8 +95,9 @@ tikTakBoom = {
             result.push(answers[index]);
             answers.splice(index, 1);
         }
+
         const answersCount = randomIntNumber(5, 2);
-        console.log(answersCount);
+  
         while (result.length>answersCount){
             const index = randomIntNumber(result.length-1, 0);
             if (result[index][1].result === true){continue};
@@ -114,20 +108,30 @@ tikTakBoom = {
     },
 
     printQuestion(task) {
-        const question = task.question;
+        //кнопки с ответами удаляются со страницы
+        [...document.querySelectorAll('.questions__answer')].forEach(node =>{
+            node.remove();
+        })
+        
+        this.textFieldQuestion.innerText = task.question;
         
         //перевод объекта в двумерный массив и избавление от question
         let answers = Object.entries(task).filter(el => (el[0]!="question"));
 
-        answers = randomAnswers(answers);
+        answers = this.randomAnswers(answers);
 
-        console.log(answers);
-        // this.textFieldAnswer1.addEventListener('click', answer1 = () => this.turnOff('answer1'));
-        // this.textFieldAnswer2.addEventListener('click', answer2 = () => this.turnOff('answer2'));
-
+        //Генерация кнопок с ответами
+        for (let answer of answers){
+    
+            const divAnswer = document.createElement('div');
+            divAnswer.id = answer[0];
+            divAnswer.className = 'questions__answer';
+            divAnswer.innerText = answer[1].value;
+            
+            this.questionBlock.append(divAnswer);
+            divAnswer.addEventListener('click', () => this.turnOff(answer[1].result));
+        };
         
-
-        this.currentTask = task;
     },
 
     
@@ -149,8 +153,6 @@ tikTakBoom = {
         setTimeout(() => {
             this.buttonReplay.classList.add('show');
             this.textFieldQuestion.innerText = ``;
-            this.textFieldAnswer1.innerText = ``;
-            this.textFieldAnswer2.innerText = ``;
         }, 6000);
 
 
