@@ -1,10 +1,8 @@
 // TODO Расширить список вопросов в tikTakBoomTasks.js
-// TODO Перед ходом игрока делать задержку 3 секунды и ее отображение в gameStatusField
-// TODO Если игрок дает 3 неверных ответа - он выбывает из игры. Если выбыли все - бомба взрывается
 // TODO Побеждает игрок с меньшим количеством ошибок. При равном количестве - пенальти: 5 секунд на ответ и 1 попытка
 // TODO Реализовать "вопрос на миллион" - ситуацию, когда ответ на вопрос сразу дает победу. Добавить визуальный эффект к такому вопросу.
 // TODO Реализовать "вопрос-восьмерку"
-// TODO У каждого игрока таймер бомбы должен идти отдельно
+
 
 tikTakBoom = {
     init() {
@@ -59,26 +57,25 @@ tikTakBoom = {
         this.timer();
     },
 
-    // !По непонятным причинам this.timerON = 0; ломает игру
-    waiting(){
-        this.timerON = 1;
-
-        let wait = 3;
-        function waitingTimer(){
-            this.gameStatusField.innerText = `${this.playerName}, твой вопрос через: ${wait}...`
-            setTimeout(() => {
-                wait-=1;
-                if (wait>0){waitingTimer()};
-            }, 1000);
-            
-        }
-        waitingTimer();
-        
+    waitingTimer (wait){
+        this.gameStatusField.innerText = `${this.playerName}, твой вопрос через: ${wait}...`
         setTimeout(() => {
-            this.turnOn();
-            this.timerON = 1;
-        }, 3100);
+            if (wait>0){
+                this.waitingTimer(wait-=1);
+            }else{
+                this.timerON = 1;
+                this.turnOn();
+            };
+        }, 1000);
+        
     },
+    
+    waiting(){
+        this.timerON = 0;
+        this.waitingTimer(3); 
+    },
+
+
 
     turnOn() {
         this.gameStatusField.innerText = ` Вопрос к ${this.playerName}`;
@@ -120,6 +117,7 @@ tikTakBoom = {
         this.players = this.players.filter(player => (player.life > 0));
 
         this.activePlayer = (this.activePlayer == this.players.length-1) ? 0: this.activePlayer+1;
+           
 
         this.playersBarRefresh();
 
@@ -133,7 +131,7 @@ tikTakBoom = {
             //TODO тут должна быть победа у того, у кого осталось больше жизней, если равны - пенальти.
             alert('вопросы кончились');
             } else {
-                this.turnOn();
+                this.waiting();
             }
             
 
