@@ -17,7 +17,6 @@ tikTakBoom = {
         this.players = [];
 
         this.startGame = startGame;
-        this.stopGame = stopGame;
         this.timerField = timerField;
         this.gameStatusField = gameStatusField;
         this.textFieldQuestion = questionField;
@@ -95,15 +94,38 @@ tikTakBoom = {
         this.textFieldAnswer2.removeEventListener('click', answer2);
     },
 
+    //принимает упорядоченные ответы на входе и возвращает от 2 до 5 перемешанных ответов. Правильный ответ есть всегда.
+    randomAnswers(answers){
+        let result = [];
+        while (answers.length>0){
+            const index = randomIntNumber(answers.length-1, 0);
+            result.push(answers[index]);
+            answers.splice(index, 1);
+        }
+        const answersCount = randomIntNumber(5, 2);
+        console.log(answersCount);
+        while (result.length>answersCount){
+            const index = randomIntNumber(result.length-1, 0);
+            if (result[index][1].result === true){continue};
+
+            result.splice(index, 1);
+        }
+        return result;
+    },
+
     printQuestion(task) {
-        this.textFieldQuestion.innerText = task.question;
-        this.textFieldAnswer1.innerText = task.answer1.value;
-        this.textFieldAnswer2.innerText = task.answer2.value;
+        const question = task.question;
+        
+        //перевод объекта в двумерный массив и избавление от question
+        let answers = Object.entries(task).filter(el => (el[0]!="question"));
 
-        this.textFieldAnswer1.addEventListener('click', answer1 = () => this.turnOff('answer1'));
-        this.textFieldAnswer2.addEventListener('click', answer2 = () => this.turnOff('answer2'));
+        answers = randomAnswers(answers);
 
-        this.stopGame.addEventListener('click', () => this.finish());
+        console.log(answers);
+        // this.textFieldAnswer1.addEventListener('click', answer1 = () => this.turnOff('answer1'));
+        // this.textFieldAnswer2.addEventListener('click', answer2 = () => this.turnOff('answer2'));
+
+        
 
         this.currentTask = task;
     },

@@ -15,6 +15,7 @@ window.onload = function()
 };
 
 // TODO перед стартом игры проверять JSON-файл на корректность
+//Старт игры
 document.querySelector('#startGame').addEventListener('click', () =>{
     document.querySelector('.screen-start').classList.remove('screen-start__show');    
     
@@ -42,6 +43,9 @@ document.querySelector('#startGame').addEventListener('click', () =>{
     tikTakBoom.playersBarRefresh();
     tikTakBoom.run();
 });
+
+//Прерывание игры
+stopGame.addEventListener('click', () => tikTakBoom.finish());
 
 //Автосохранения настроек
 window.addEventListener('unload', () =>{
