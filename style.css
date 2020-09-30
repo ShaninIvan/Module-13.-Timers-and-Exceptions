@@ -154,6 +154,16 @@ body {
     color: rgb(212, 8, 8);
 }
 
+.timer-output_green{
+    color: forestgreen;
+    transition: 0.2s;
+}
+
+.timer-output_orange{
+    color: orange;
+    transition: 0.2s;
+}
+
 
 .bomb-image{
     position: absolute;
@@ -201,11 +211,11 @@ body {
     height: 30px;
     border-radius: 5px;
     text-align: center;
-    padding-top: 7px;
+    padding: 7px;
     margin: 10px 0;
     background-color: rgb(255, 174, 0);
     border: 2px solid gray;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
     color: black;
 }

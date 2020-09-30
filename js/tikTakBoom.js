@@ -30,17 +30,17 @@ tikTakBoom = {
         this.boomSound = new Audio('../sound/Boom.mp3');
         this.winSound = new Audio('../sound/Win.mp3');
         this.timerSound = new Audio('../sound/Timer.mp3')
-        
+
         this.needRightAnswers = 3;
     },
 
     //Перерисовка панели игроков в соответствии с их состоянием
-    playersBarRefresh(){
+    playersBarRefresh() {
         this.playersBar.innerHTML = "";
-        this.players.forEach(el =>{
+        this.players.forEach(el => {
             let newUl = document.createElement("ul");
             newUl.innerHTML += `${el.name}: `
-            for (let i = 0; i<el.life; i++){
+            for (let i = 0; i < el.life; i++) {
                 newUl.innerHTML += `<li></li>`
             }
             this.playersBar.append(newUl);
@@ -72,8 +72,20 @@ tikTakBoom = {
         if (value) {
             this.gameStatusField.innerText = 'Верно!';
             this.rightAnswers += 1;
+            //При верном ответе добавляется 5 секунд
+            this.boomTimer += 5;
+            this.timerField.classList.toggle('timer-output_green', true);
+            setTimeout(() => {
+                this.timerField.classList.toggle('timer-output_green', false);
+            }, 250);
         } else {
             this.gameStatusField.innerText = 'Неверно!';
+            //При неправильном ответе отнимается 5 секунд
+            this.boomTimer -= 5;
+            this.timerField.classList.toggle('timer-output_orange', true);
+            setTimeout(() => {
+                this.timerField.classList.toggle('timer-output_orange', false);
+            }, 250);
         }
         if (this.rightAnswers < this.needRightAnswers) {
             if (this.tasks.length === 0) {
@@ -88,19 +100,19 @@ tikTakBoom = {
     },
 
     //принимает упорядоченные ответы на входе и возвращает от 2 до 5 перемешанных ответов. Правильный ответ есть всегда.
-    randomAnswers(answers){
+    randomAnswers(answers) {
         let result = [];
-        while (answers.length>0){
-            const index = randomIntNumber(answers.length-1, 0);
+        while (answers.length > 0) {
+            const index = randomIntNumber(answers.length - 1, 0);
             result.push(answers[index]);
             answers.splice(index, 1);
         }
 
         const answersCount = randomIntNumber(5, 2);
-  
-        while (result.length>answersCount){
-            const index = randomIntNumber(result.length-1, 0);
-            if (result[index][1].result === true){continue};
+
+        while (result.length > answersCount) {
+            const index = randomIntNumber(result.length - 1, 0);
+            if (result[index][1].result === true) { continue };
 
             result.splice(index, 1);
         }
@@ -109,32 +121,44 @@ tikTakBoom = {
 
     printQuestion(task) {
         //кнопки с ответами удаляются со страницы
-        [...document.querySelectorAll('.questions__answer')].forEach(node =>{
+        [...document.querySelectorAll('.questions__answer')].forEach(node => {
             node.remove();
         })
-        
-        this.textFieldQuestion.innerText = task.question;
-        
+
+        const question = task.question
+        let fSize = 18;
+        console.log(question.length)
+        switch (true){
+            case question.length > 50:
+                fSize = 14;
+                break;
+            case question.length > 100:
+                fSize = 10;
+                break;
+        }
+        this.textFieldQuestion.style.fontSize = `${fSize}px`;
+        this.textFieldQuestion.innerText = question;
+
         //перевод объекта в двумерный массив и избавление от question
-        let answers = Object.entries(task).filter(el => (el[0]!="question"));
+        let answers = Object.entries(task).filter(el => (el[0] != "question"));
 
         answers = this.randomAnswers(answers);
 
         //Генерация кнопок с ответами
-        for (let answer of answers){
-    
+        for (let answer of answers) {
+
             const divAnswer = document.createElement('div');
             divAnswer.id = answer[0];
             divAnswer.className = 'questions__answer';
             divAnswer.innerText = answer[1].value;
-            
+
             this.questionBlock.append(divAnswer);
             divAnswer.addEventListener('click', () => this.turnOff(answer[1].result));
         };
-        
+
     },
 
-    
+
 
     finish(result = 'lose') {
         this.state = 0;
@@ -169,9 +193,9 @@ tikTakBoom = {
             this.timerField.innerText = `${min}:${sec}`;
 
             //Декоративный эффект, цифры таймера краснеют при 10 sec и меньше
-            if (this.boomTimer <=10){
+            if (this.boomTimer <= 10) {
                 this.timerField.classList.toggle('timer-output_red', true);
-            }else{
+            } else {
                 this.timerField.classList.toggle('timer-output_red', false);
             };
 
@@ -185,7 +209,7 @@ tikTakBoom = {
             } else {
                 this.finish('lose');
             }
-        }else{
+        } else {
             this.timerSound.pause();
         }
     },
