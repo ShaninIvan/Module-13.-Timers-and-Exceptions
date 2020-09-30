@@ -220,6 +220,11 @@ body {
     color: black;
 }
 
+.questions__header_gold{
+    background: rgb(242,239,187);
+    background: linear-gradient(347deg, rgba(242,239,187,1) 0%, rgba(236,218,102,1) 17%, rgba(242,239,187,1) 34%, rgba(236,218,102,1) 50%, rgba(242,239,187,1) 66%, rgba(236,218,102,1) 83%, rgba(242,239,187,0.9777626811594203) 100%);
+}
+
 .questions__answer{
     width: 500px;
     border-radius: 5px;

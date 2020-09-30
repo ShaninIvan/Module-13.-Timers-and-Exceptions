@@ -28,9 +28,6 @@ document.querySelector('#startGame').addEventListener('click', () =>{
         if ((el.name == "timer") && (el.checked == true)){timer = parseInt(el.value)}
     });
 
-    tikTakBoom.countOfPlayers = playersCount;
-    tikTakBoom.boomTimer = timer;
-
     const players = tikTakBoom.players;
     for (let i=1; i<=playersCount; i++){
         const player = {
@@ -40,7 +37,7 @@ document.querySelector('#startGame').addEventListener('click', () =>{
         }
         players.push(player);
     }
-    tikTakBoom.playersBarRefresh();
+
     tikTakBoom.run();
 });
 

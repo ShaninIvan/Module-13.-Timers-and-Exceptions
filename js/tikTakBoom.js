@@ -1,9 +1,7 @@
 // TODO Расширить список вопросов в tikTakBoomTasks.js
 // TODO Перед ходом игрока делать задержку 3 секунды и ее отображение в gameStatusField
-// TODO В случае верного ответа добавлять к таймеру 5 секунд, иначе - отнимать
 // TODO Если игрок дает 3 неверных ответа - он выбывает из игры. Если выбыли все - бомба взрывается
 // TODO Побеждает игрок с меньшим количеством ошибок. При равном количестве - пенальти: 5 секунд на ответ и 1 попытка
-// TODO Рандомизировать количество (от 2 до 5) и порядок ответов
 // TODO Реализовать "вопрос на миллион" - ситуацию, когда ответ на вопрос сразу дает победу. Добавить визуальный эффект к такому вопросу.
 // TODO Реализовать "вопрос-восьмерку"
 // TODO У каждого игрока таймер бомбы должен идти отдельно
@@ -33,7 +31,6 @@ tikTakBoom = {
         this.correctSound = new Audio('../sound/Correct.mp3');
         this.ErrorSound = new Audio('../sound/Error.mp3');
 
-        this.needRightAnswers = 3;
     },
 
     //Перерисовка панели игроков в соответствии с их состоянием
@@ -50,30 +47,52 @@ tikTakBoom = {
     },
 
     run() {
-        this.state = 1;
+        this.timerON = 1;
+        this.activePlayer = 0;
 
-        this.rightAnswers = 0;
+        this.playerName = this.players[this.activePlayer].name;
+        this.playerLife = this.players[this.activePlayer].life;
+        this.boomTimer = this.players[this.activePlayer].timer;
 
         this.turnOn();
-
+        this.playersBarRefresh();
         this.timer();
     },
 
+    // !По непонятным причинам this.timerON = 0; ломает игру
+    waiting(){
+        this.timerON = 1;
+
+        let wait = 3;
+        function waitingTimer(){
+            this.gameStatusField.innerText = `${this.playerName}, твой вопрос через: ${wait}...`
+            setTimeout(() => {
+                wait-=1;
+                if (wait>0){waitingTimer()};
+            }, 1000);
+            
+        }
+        waitingTimer();
+        
+        setTimeout(() => {
+            this.turnOn();
+            this.timerON = 1;
+        }, 3100);
+    },
+
     turnOn() {
-        this.gameStatusField.innerText += ` Вопрос игроку №${this.state}`;
+        this.gameStatusField.innerText = ` Вопрос к ${this.playerName}`;
 
         const taskNumber = randomIntNumber(this.tasks.length - 1);
         this.printQuestion(this.tasks[taskNumber]);
 
         this.tasks.splice(taskNumber, 1);
 
-        this.state = (this.state === this.countOfPlayers) ? 1 : this.state + 1;
     },
 
     turnOff(value) {
         if (value) {
             this.gameStatusField.innerText = 'Верно!';
-            this.rightAnswers += 1;
             //При верном ответе добавляется 5 секунд
             this.correctSound.play();
             this.boomTimer += 5;
@@ -81,25 +100,42 @@ tikTakBoom = {
             setTimeout(() => {
                 this.timerField.classList.toggle('timer-output_green', false);
             }, 250);
+        
         } else {
             this.gameStatusField.innerText = 'Неверно!';
             //При неправильном ответе отнимается 5 секунд
             this.ErrorSound.play();
-            this.boomTimer -= 5;
+            if (this.playerLife<=0){this.boomTimer -= 5};
             this.timerField.classList.toggle('timer-output_orange', true);
             setTimeout(() => {
                 this.timerField.classList.toggle('timer-output_orange', false);
             }, 250);
+            //и отбирается одна жизнь
+            this.playerLife -=1;
         }
-        if (this.rightAnswers < this.needRightAnswers) {
-            if (this.tasks.length === 0) {
-                this.finish('lose');
+
+        //Обновление параметров текущего игрока, удаление "мертвых" и передача хода следующему
+        this.players[this.activePlayer].life = this.playerLife;
+        this.players[this.activePlayer].timer = this.boomTimer;
+        this.players = this.players.filter(player => (player.life > 0));
+
+        this.activePlayer = (this.activePlayer == this.players.length-1) ? 0: this.activePlayer+1;
+
+        this.playersBarRefresh();
+
+        if (this.players.length == 0){this.finish('lose')};
+
+        this.playerName = this.players[this.activePlayer].name;
+        this.playerLife = this.players[this.activePlayer].life;
+        this.boomTimer = this.players[this.activePlayer].timer;
+
+          if (this.tasks.length === 0) {
+            //TODO тут должна быть победа у того, у кого осталось больше жизней, если равны - пенальти.
+            alert('вопросы кончились');
             } else {
                 this.turnOn();
             }
-        } else {
-            this.finish('won');
-        }
+            
 
     },
 
@@ -132,9 +168,9 @@ tikTakBoom = {
         //Размер шрифта вопроса скалируется от длины текста
         const question = task.question
         let fSize = 18;
-        console.log(question.length)
+
         switch (true){
-            case question.length > 50:
+            case question.length > 60:
                 fSize = 14;
                 break;
             case question.length > 100:
@@ -166,7 +202,7 @@ tikTakBoom = {
 
 
     finish(result = 'lose') {
-        this.state = 0;
+        this.timerON = 0;
         this.timerSound.pause();
         if (result === 'lose') {
             this.screenFinish.classList.add('screen-finish__lose_show');
@@ -188,7 +224,8 @@ tikTakBoom = {
     },
 
     timer() {
-        if (this.state) {
+        if (this.timerON ==1) {
+
             this.boomTimer -= 1;
             let sec = this.boomTimer % 60;
             let min = (this.boomTimer - sec) / 60;
@@ -203,7 +240,7 @@ tikTakBoom = {
                 this.timerField.classList.toggle('timer-output_red', false);
             };
 
-            if (this.boomTimer > 0) {
+            if (this.players.length > 0) {
                 setTimeout(
                     () => {
                         this.timerSound.play();
@@ -211,8 +248,10 @@ tikTakBoom = {
                     },
                     1000,
                 )
-            } else {
-                this.finish('lose');
+            } 
+            if (this.boomTimer<=0){
+                this.playerLife = 0;
+                this.turnOff(false);
             }
         } else {
         }
