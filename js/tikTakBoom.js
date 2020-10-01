@@ -53,38 +53,36 @@ tikTakBoom = {
 
         this.turnOn();
         this.playersBarRefresh();
-        this.timer();
     },
 
-    
-    waiting(wait){
+
+    waiting(wait) {
         this.gameStatusField.innerText = `${this.playerName}, твой вопрос через: ${wait}...`
         setTimeout(() => {
-            if (wait ==1){this.updateTimer()};
-            if (wait>0){
-                this.waiting(wait-=1);
-            }else{
+            if (wait == 1) { this.updateTimer() };
+            if (wait > 0) {
+                this.waiting(wait -= 1);
+            } else {
                 this.timerON = 1
-                this.timer();
                 this.turnOn();
             };
-        }, 1000);  
+        }, 1000);
     },
 
     //может вызвать "золотой вопрос" или "опасный вопрос", каждый с шансом 5%
-    specialQuestion(){
+    specialQuestion() {
         this.textFieldQuestion.classList.toggle('questions__header_gold', false);
         this.textFieldQuestion.classList.toggle('questions__header_danger', false);
         this.questionType = 'normal';
 
         const special = randomIntNumber(100, 1);
 
-        if (special>95){
+        if (special > 95) {
             this.textFieldQuestion.classList.toggle('questions__header_gold', true);
             this.questionType = 'gold';
         }
 
-        if (special<6){
+        if (special < 6) {
             this.textFieldQuestion.classList.toggle('questions__header_danger', true);
             this.questionType = 'danger';
         }
@@ -94,22 +92,21 @@ tikTakBoom = {
     turnOn() {
         this.gameStatusField.innerText = ` Вопрос к ${this.playerName}`;
 
-        this.specialQuestion();
         const taskNumber = randomIntNumber(this.tasks.length - 1);
         this.printQuestion(this.tasks[taskNumber]);
 
         this.tasks.splice(taskNumber, 1);
-
     },
 
-    whoNext(playerName){
-        
-        const index = this.players.findIndex(el =>el.name == playerName);
-        const nextIndex = (index < this.players.length-1) ? index+1 : 0;
+    whoNext(playerName) {
+
+        const index = this.players.findIndex(el => el.name == playerName);
+        const nextIndex = (index < this.players.length - 1) ? index + 1 : 0;
 
         //Обновление параметров текущего игрока, удаление "мертвых"
         this.players[index].life = this.playerLife;
         this.players[index].timer = this.boomTimer;
+        this.players = this.players.filter(player => (player.life > 0));
 
         //Вызываются параметры следующего игрока
         this.playerName = this.players[nextIndex].name;
@@ -117,16 +114,44 @@ tikTakBoom = {
         this.boomTimer = this.players[nextIndex].timer;
     },
 
-    whoWin(){
+    whoWin() {
+        let lifes = [];
+        this.players.forEach(player => lifes.push(player.life));
 
+        const max = Math.max(...lifes);
+
+        this.players = this.players.filter(player => player.life === max)
+
+        this.playersBarRefresh();
+
+        //генерация случайной задачи сложения
+        const rightAnswer = randomIntNumber(1000, 1);
+        const operand = randomIntNumber(900, 1);
+        const operand2 = rightAnswer - operand;
+
+        const task = {};
+        task.question = `${operand} + ${operand2} =`;
+        task.answer1 = { result: true, value: `${rightAnswer}` };
+        task.answer2 = { result: false, value: `${rightAnswer + 5}` };
+        task.answer3 = { result: false, value: `${rightAnswer - 10}` };
+        task.answer4 = { result: false, value: `${rightAnswer + 33}` };
+        task.answer5 = { result: false, value: `${rightAnswer - 100}` };
+
+        this.printQuestion(task);
     },
 
     turnOff(value) {
+        this.timerON = 0;
         if (value) {
             this.textFieldQuestion.innerText = 'Верно!';
             //Если вопрос был "золотым", текущий игрок сразу побеждает
-            if (this.questionType == 'gold'){
+            if (this.questionType == 'gold') {
                 this.finish('won', this.playerName);
+                return false;
+            }
+            //Отдельная инструкция для победы в режиме пенальти
+            if ((this.players.length == 1)) {
+                this.finish('won', this.players[0].name);
                 return false;
             }
             //При верном ответе добавляется 5 секунд
@@ -136,20 +161,25 @@ tikTakBoom = {
             setTimeout(() => {
                 this.timerField.classList.toggle('timer-output_green', false);
             }, 250);
-        
+
         } else {
             //Если вопрос был "опасным", бомба взрывается для всех
-            if (this.questionType == 'danger'){
+            if (this.questionType == 'danger') {
                 this.finish();
                 return false;
             }
-            
+
+            if ((this.players.length == 1) && (this.tasks.length === 0)) {
+                this.finish();
+                return false;
+            }
+
             //При неправильном ответе отнимается 5 секунд
             this.ErrorSound.play();
-            if (this.boomTimer>5){
+            if (this.boomTimer > 5) {
                 this.textFieldQuestion.innerText = 'Неверно!';
                 this.boomTimer -= 5
-            }else{
+            } else {
                 this.textFieldQuestion.innerText = `Время ${this.playerName} закончилось!`;
                 this.boomTimer = 0;
                 this.playerLife = 0;
@@ -159,62 +189,42 @@ tikTakBoom = {
                 this.timerField.classList.toggle('timer-output_orange', false);
             }, 250);
             //и отбирается одна жизнь
-            this.playerLife -=1;
+            this.playerLife -= 1;
         }
         this.updateTimer();
 
-        this.whoNext(this.playerName);   
+        this.whoNext(this.playerName);
 
-        //Игроки с 0 жизни выбывают
-        this.players = this.players.filter(player => (player.life > 0));
-        
         this.playersBarRefresh();
 
-        if (this.players.length == 0){
+        if (this.players.length == 0) {
             this.finish('lose');
             return false;
         };
 
+        //кнопки с ответами удаляются со страницы
+        [...document.querySelectorAll('.questions__answer')].forEach(node => {
+            node.remove();
+        });
+
+        //Если кончились вопросы - попытка определить победителя, иначе - следующий вопрос.
         if (this.tasks.length === 0) {
             this.whoWin();
-        }else {
-            //кнопки с ответами удаляются со страницы
-            [...document.querySelectorAll('.questions__answer')].forEach(node => {
-                node.remove();
-            });
-            
-            this.timerON = 0;
-            this.waiting(3); 
+        } else {
+            this.waiting(1);
         };
-            
+
     },
 
-    //принимает упорядоченные ответы на входе и возвращает от 2 до 5 перемешанных ответов. Правильный ответ есть всегда.
-    randomAnswers(answers) {
-        let result = [];
-        while (answers.length > 0) {
-            const index = randomIntNumber(answers.length - 1, 0);
-            result.push(answers[index]);
-            answers.splice(index, 1);
-        }
-
-        const answersCount = randomIntNumber(5, 2);
-
-        while (result.length > answersCount) {
-            const index = randomIntNumber(result.length - 1, 0);
-            if (result[index][1].result === true) { continue };
-
-            result.splice(index, 1);
-        }
-        return result;
-    },
 
     printQuestion(task) {
+        this.specialQuestion();
+
         //Размер шрифта вопроса скалируется от длины текста
-        const question = task.question
+        const question = task.question;
         let fSize = 18;
 
-        switch (true){
+        switch (true) {
             case question.length > 60:
                 fSize = 14;
                 break;
@@ -228,7 +238,7 @@ tikTakBoom = {
         //перевод объекта в двумерный массив и избавление от question
         let answers = Object.entries(task).filter(el => (el[0] != "question"));
 
-        answers = this.randomAnswers(answers);
+        answers = randomAnswers(answers);
 
         //Генерация кнопок с ответами
         for (let answer of answers) {
@@ -241,7 +251,8 @@ tikTakBoom = {
             this.questionBlock.append(divAnswer);
             divAnswer.addEventListener('click', () => this.turnOff(answer[1].result));
         };
-
+        this.timerON = 1;
+        this.timer();
     },
 
 
@@ -268,7 +279,7 @@ tikTakBoom = {
 
     },
 
-    updateTimer(){
+    updateTimer() {
         let sec = this.boomTimer % 60;
         let min = (this.boomTimer - sec) / 60;
         sec = (sec >= 10) ? sec : '0' + sec;
@@ -284,7 +295,7 @@ tikTakBoom = {
     },
 
     timer() {
-        if (this.timerON ==1) {
+        if (this.timerON === 1) {
 
             this.boomTimer -= 1;
 
@@ -298,8 +309,8 @@ tikTakBoom = {
                     },
                     1000,
                 )
-            } 
-            if (this.boomTimer<=0){
+            }
+            if (this.boomTimer <= 0) {
                 this.playerLife = 0;
                 this.turnOff(false);
             }
