@@ -1,7 +1,5 @@
 // TODO Расширить список вопросов в tikTakBoomTasks.js
 // TODO Побеждает игрок с меньшим количеством ошибок. При равном количестве - пенальти: 5 секунд на ответ и 1 попытка
-// TODO Реализовать "вопрос на миллион" - ситуацию, когда ответ на вопрос сразу дает победу. Добавить визуальный эффект к такому вопросу.
-// TODO Реализовать "вопрос-восьмерку"
 
 
 tikTakBoom = {
@@ -11,6 +9,7 @@ tikTakBoom = {
 
         this.playersBar = playersBar;
         this.players = [];
+        this.questionType = 'normal';
 
         this.startGame = startGame;
         this.timerField = timerField;
@@ -57,29 +56,45 @@ tikTakBoom = {
         this.timer();
     },
 
-    waitingTimer (wait){
+    
+    waiting(wait){
         this.gameStatusField.innerText = `${this.playerName}, твой вопрос через: ${wait}...`
         setTimeout(() => {
+            if (wait ==1){this.updateTimer()};
             if (wait>0){
-                this.waitingTimer(wait-=1);
+                this.waiting(wait-=1);
             }else{
-                this.timerON = 1;
+                this.timerON = 1
+                this.timer();
                 this.turnOn();
             };
-        }, 1000);
-        
-    },
-    
-    waiting(){
-        this.timerON = 0;
-        this.waitingTimer(3); 
+        }, 1000);  
     },
 
+    //может вызвать "золотой вопрос" или "опасный вопрос", каждый с шансом 5%
+    specialQuestion(){
+        this.textFieldQuestion.classList.toggle('questions__header_gold', false);
+        this.textFieldQuestion.classList.toggle('questions__header_danger', false);
+        this.questionType = 'normal';
 
+        const special = randomIntNumber(100, 1);
+
+        if (special>95){
+            this.textFieldQuestion.classList.toggle('questions__header_gold', true);
+            this.questionType = 'gold';
+        }
+
+        if (special<6){
+            this.textFieldQuestion.classList.toggle('questions__header_danger', true);
+            this.questionType = 'danger';
+        }
+
+    },
 
     turnOn() {
         this.gameStatusField.innerText = ` Вопрос к ${this.playerName}`;
 
+        this.specialQuestion();
         const taskNumber = randomIntNumber(this.tasks.length - 1);
         this.printQuestion(this.tasks[taskNumber]);
 
@@ -87,9 +102,33 @@ tikTakBoom = {
 
     },
 
+    whoNext(playerName){
+        
+        const index = this.players.findIndex(el =>el.name == playerName);
+        const nextIndex = (index < this.players.length-1) ? index+1 : 0;
+
+        //Обновление параметров текущего игрока, удаление "мертвых"
+        this.players[index].life = this.playerLife;
+        this.players[index].timer = this.boomTimer;
+
+        //Вызываются параметры следующего игрока
+        this.playerName = this.players[nextIndex].name;
+        this.playerLife = this.players[nextIndex].life;
+        this.boomTimer = this.players[nextIndex].timer;
+    },
+
+    whoWin(){
+
+    },
+
     turnOff(value) {
         if (value) {
-            this.gameStatusField.innerText = 'Верно!';
+            this.textFieldQuestion.innerText = 'Верно!';
+            //Если вопрос был "золотым", текущий игрок сразу побеждает
+            if (this.questionType == 'gold'){
+                this.finish('won', this.playerName);
+                return false;
+            }
             //При верном ответе добавляется 5 секунд
             this.correctSound.play();
             this.boomTimer += 5;
@@ -99,10 +138,22 @@ tikTakBoom = {
             }, 250);
         
         } else {
-            this.gameStatusField.innerText = 'Неверно!';
+            //Если вопрос был "опасным", бомба взрывается для всех
+            if (this.questionType == 'danger'){
+                this.finish();
+                return false;
+            }
+            
             //При неправильном ответе отнимается 5 секунд
             this.ErrorSound.play();
-            if (this.playerLife<=0){this.boomTimer -= 5};
+            if (this.boomTimer>5){
+                this.textFieldQuestion.innerText = 'Неверно!';
+                this.boomTimer -= 5
+            }else{
+                this.textFieldQuestion.innerText = `Время ${this.playerName} закончилось!`;
+                this.boomTimer = 0;
+                this.playerLife = 0;
+            }
             this.timerField.classList.toggle('timer-output_orange', true);
             setTimeout(() => {
                 this.timerField.classList.toggle('timer-output_orange', false);
@@ -110,31 +161,32 @@ tikTakBoom = {
             //и отбирается одна жизнь
             this.playerLife -=1;
         }
+        this.updateTimer();
 
-        //Обновление параметров текущего игрока, удаление "мертвых" и передача хода следующему
-        this.players[this.activePlayer].life = this.playerLife;
-        this.players[this.activePlayer].timer = this.boomTimer;
+        this.whoNext(this.playerName);   
+
+        //Игроки с 0 жизни выбывают
         this.players = this.players.filter(player => (player.life > 0));
-
-        this.activePlayer = (this.activePlayer == this.players.length-1) ? 0: this.activePlayer+1;
-           
-
+        
         this.playersBarRefresh();
 
-        if (this.players.length == 0){this.finish('lose')};
+        if (this.players.length == 0){
+            this.finish('lose');
+            return false;
+        };
 
-        this.playerName = this.players[this.activePlayer].name;
-        this.playerLife = this.players[this.activePlayer].life;
-        this.boomTimer = this.players[this.activePlayer].timer;
-
-          if (this.tasks.length === 0) {
-            //TODO тут должна быть победа у того, у кого осталось больше жизней, если равны - пенальти.
-            alert('вопросы кончились');
-            } else {
-                this.waiting();
-            }
+        if (this.tasks.length === 0) {
+            this.whoWin();
+        }else {
+            //кнопки с ответами удаляются со страницы
+            [...document.querySelectorAll('.questions__answer')].forEach(node => {
+                node.remove();
+            });
             
-
+            this.timerON = 0;
+            this.waiting(3); 
+        };
+            
     },
 
     //принимает упорядоченные ответы на входе и возвращает от 2 до 5 перемешанных ответов. Правильный ответ есть всегда.
@@ -158,11 +210,6 @@ tikTakBoom = {
     },
 
     printQuestion(task) {
-        //кнопки с ответами удаляются со страницы
-        [...document.querySelectorAll('.questions__answer')].forEach(node => {
-            node.remove();
-        })
-
         //Размер шрифта вопроса скалируется от длины текста
         const question = task.question
         let fSize = 18;
@@ -198,8 +245,7 @@ tikTakBoom = {
     },
 
 
-
-    finish(result = 'lose') {
+    finish(result = 'lose', playerName) {
         this.timerON = 0;
         this.timerSound.pause();
         if (result === 'lose') {
@@ -208,6 +254,7 @@ tikTakBoom = {
             this.boomSound.play();
         }
         if (result === 'won') {
+            this.textFinish.innerText = `${playerName}, `;
             this.screenFinish.classList.add('screen-finish__win_show');
             this.textFinish.classList.add('text__win_show');
             this.winSound.play();
@@ -221,22 +268,27 @@ tikTakBoom = {
 
     },
 
+    updateTimer(){
+        let sec = this.boomTimer % 60;
+        let min = (this.boomTimer - sec) / 60;
+        sec = (sec >= 10) ? sec : '0' + sec;
+        min = (min >= 10) ? min : '0' + min;
+        this.timerField.innerText = `${min}:${sec}`;
+
+        //Декоративный эффект, цифры таймера краснеют при 10 sec и меньше
+        if (this.boomTimer <= 10) {
+            this.timerField.classList.toggle('timer-output_red', true);
+        } else {
+            this.timerField.classList.toggle('timer-output_red', false);
+        };
+    },
+
     timer() {
         if (this.timerON ==1) {
 
             this.boomTimer -= 1;
-            let sec = this.boomTimer % 60;
-            let min = (this.boomTimer - sec) / 60;
-            sec = (sec >= 10) ? sec : '0' + sec;
-            min = (min >= 10) ? min : '0' + min;
-            this.timerField.innerText = `${min}:${sec}`;
 
-            //Декоративный эффект, цифры таймера краснеют при 10 sec и меньше
-            if (this.boomTimer <= 10) {
-                this.timerField.classList.toggle('timer-output_red', true);
-            } else {
-                this.timerField.classList.toggle('timer-output_red', false);
-            };
+            this.updateTimer();
 
             if (this.players.length > 0) {
                 setTimeout(
