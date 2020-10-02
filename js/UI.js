@@ -13,22 +13,22 @@ const buttonReplay = document.querySelector('#buttonReplay');
 
 
 //Показать начальный экран
-export const startScreenShow = () =>{
-    startScreen.classList.toggle('screen-start__show', true); 
+export const startScreenShow = () => {
+    startScreen.classList.toggle('screen-start__show', true);
 }
 
 //Скрыть начальный экран
-export const startScreenHide = () =>{
-    startScreen.classList.toggle('screen-start__show', false); 
+export const startScreenHide = () => {
+    startScreen.classList.toggle('screen-start__show', false);
 }
 
 //Изменение надписи в статус-баре
-export const statusBarChange = (text) =>{
+export const statusBarChange = (text) => {
     statusBar.innerText = text;
 }
 
 //Перерисовка таймера
-export const timerFieldRefresh = (time) =>{
+export const timerFieldRefresh = (time) => {
     let sec = time % 60;
     let min = (time - sec) / 60;
     sec = (sec >= 10) ? sec : '0' + sec;
@@ -44,7 +44,7 @@ export const timerFieldRefresh = (time) =>{
 }
 
 //Мигание таймера зеленым цветом
-export const timerGreenFlash = () =>{
+export const timerGreenFlash = () => {
     timerField.classList.toggle('timer-output_green', true);
     setTimeout(() => {
         timerField.classList.toggle('timer-output_green', false);
@@ -52,7 +52,7 @@ export const timerGreenFlash = () =>{
 }
 
 //Мигание таймера оранжевым цветом
-export const timerOrangeFlash = () =>{
+export const timerOrangeFlash = () => {
     timerField.classList.toggle('timer-output_orange', true);
     setTimeout(() => {
         timerField.classList.toggle('timer-output_orange', false);
@@ -76,7 +76,7 @@ export const playersBarRefresh = (players) => {
 //Тип вопроса и соответсвующие эффекты
 export let questionType = 'normal';
 
-export const randomQuestionType = () =>{
+export const randomQuestionType = () => {
     questionField.classList.toggle('questions__header_gold', false);
     questionField.classList.toggle('questions__header_danger', false);
     questionType = 'normal';
@@ -95,7 +95,7 @@ export const randomQuestionType = () =>{
 }
 
 //Изменение текста вопроса
-export const questionFieldChange = (text) =>{
+export const questionFieldChange = (text) => {
     questionField.innerText = text;
 }
 
@@ -137,30 +137,30 @@ export const printQuestion = (task, clickFunction) => {
 }
 
 //удаление кнопок с ответами
-export const clearAnswers = () =>{
+export const clearAnswers = () => {
     [...document.querySelectorAll('.questions__answer')].forEach(node => {
         node.remove();
     });
 }
 
 //Экран победы
-export const finishScreenWin = (playerName) =>{
+export const finishScreenWin = (playerName) => {
     textFinish.innerText = `${playerName}, `;
-    
+
     screenFinish.classList.add('screen-finish__win_show');
     textFinish.classList.add('text__win_show');
 
     showReplayButton();
 }
 
-export const finishScreenLose = () =>{
+export const finishScreenLose = () => {
     screenFinish.classList.add('screen-finish__lose_show');
     textFinish.classList.add('text__lose_show');
 
     showReplayButton();
 }
 
-const showReplayButton = () =>{
+const showReplayButton = () => {
     setTimeout(() => {
         buttonReplay.classList.add('show');
     }, 6000);
@@ -174,9 +174,9 @@ const correctSound = new Audio('../sound/Correct.mp3');
 const ErrorSound = new Audio('../sound/Error.mp3');
 
 export const sound = {
-    boom: () =>{boomSound.play()},
-    win: () =>{winSound.play()},
-    tick: () =>{timerSound.play()},
-    correct: () =>{correctSound.play()},
-    error: () =>{ErrorSound.play()}
+    boom: () => boomSound.play(),
+    win: () => winSound.play(),
+    tick: () => timerSound.play(),
+    correct: () => correctSound.play(),
+    error: () => ErrorSound.play()
 }

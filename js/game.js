@@ -56,6 +56,7 @@ export const game = {
         //после отсева "мертвых", обновляется индекс следующего игрока
         nextIndex = this.players.findIndex(el => el.name == nextName);
 
+        //если игрок остался один
         if (this.players.length == 1){nextIndex = 0};
 
         //Вызываются параметры следующего игрока
@@ -91,13 +92,14 @@ export const game = {
                 this.finish();
                 return false;
             };
-
-            if ((this.players.length == 1) && (this.playerLife == 0)) {
-                this.finish();
-                return false;
+            
+            //При неправильном ответе отнимается 5 секунд и отбирается одна жизнь. Если режим пенальти, то отбираются все жизни.
+            if (taskGen.taskType =='JSON'){
+                this.playerLife -= 1;
+            }else{
+                this.playerLife = 0;
             };
 
-            //При неправильном ответе отнимается 5 секунд
             UI.sound.error();
             UI.timerOrangeFlash();
             if (this.boomTimer > 5) {
@@ -109,12 +111,11 @@ export const game = {
                 this.playerLife = 0;
             };
 
-            //и отбирается одна жизнь. Если режим пенальти, то отбираются все жизни.
-            if (taskGen.taskType =='JSON'){
-                this.playerLife -= 1;
-            }else{
-                this.playerLife = 0;
+            if ((this.players.length == 1) && (this.playerLife == 0)) {
+                this.finish();
+                return false;
             };
+
         };
 
         UI.timerFieldRefresh(this.boomTimer);
