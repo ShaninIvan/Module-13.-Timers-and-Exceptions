@@ -100,15 +100,16 @@ export const game = {
                 this.playerLife = 0;
             };
 
-            UI.sound.error();
             UI.timerOrangeFlash();
             if (this.boomTimer > 5) {
                 UI.questionFieldChange('Неверно!');
                 this.boomTimer -= 5
+                UI.sound.error();
             } else {
                 UI.questionFieldChange(`Время ${this.playerName} закончилось!`);
                 this.boomTimer = 0;
                 this.playerLife = 0;
+                UI.sound.boom();
             };
 
             if ((this.players.length == 1) && (this.playerLife == 0)) {
