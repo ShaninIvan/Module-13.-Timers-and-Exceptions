@@ -52,8 +52,12 @@ body {
     
 }
 
+h1{
+    text-align: center;
+}
+
 .screen-start__show{
-    height: 85vh;
+    height: 90vh;
     padding: 10px;
 }
 
@@ -64,6 +68,7 @@ body {
 .gameInfo{
     grid-area: gameInfo;
     padding: 10px;
+    text-align: left;
 }
 
 .playersCount{

@@ -15,7 +15,18 @@
             <!-- TODO Добавить описание игры -->
             <div class="gameInfo"> 
                 <h1>Тик-так-бум</h1>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat libero fuga, tempora modi voluptatem recusandae eos aliquam veniam eius asperiores, quasi, animi voluptatibus laboriosam quibusdam impedit! Cum blanditiis iusto eaque rerum distinctio eveniet optio iste, laboriosam sit suscipit delectus quis odit et, accusamus numquam exercitationem tempora obcaecati quo ad ut debitis modi labore ea? Quidem incidunt, laboriosam sapiente quisquam dolores consectetur voluptatum, excepturi, dolorum commodi eum consequuntur! Accusamus minus adipisci sequi nihil molestiae ratione distinctio, dolor obcaecati sed quod nesciunt. Aspernatur at excepturi illum! Fugit dolorum reprehenderit consequatur. Debitis earum explicabo cupiditate odit aspernatur inventore, sed neque dolorem consequatur soluta?
+                <p>В этой игре несколько игроков должны по очереди отвечать на вопросы, чтобы обезвредить бомбу.</p>
+                <h3>Правила:</h3>
+                <ul>
+                    <li>У каждого игрока время бомбы свое.</li>
+                    <li>За правильный ответ игроку добавляется пять секунд, за неправильный — отнимается.</li>
+                    <li>У каждого игрока по 3 жизни. За каждый неправильный ответ отбирается одна жизнь.</li>
+                    <li>Игрок, допустивший истечение времени таймера, или потерявший все жизни — выбывает.</li>
+                    <li>Игра может сделать случайный вопрос "золотым". Игрок, давший на него верный ответ побеждает сразу.</li>
+                    <li>Игра может сделать случайный вопрос "опасным". При неправильном ответе на него, бомба взрывается для всех.</li>
+                    <li>Если у игры заканчиваются предустановленные вопросы, она начинает генерировать случайные задачи на сложение. В этом режиме игрок ответивший неправильно, теряет все оставшиеся жизни.</li>
+                    <li>Игрок, оставшийся последним, должен ответить на один вопрос для победы.</li>
+                </ul>
             </div>
             <div class="playersCount">
                 <h2>Количество игроков:</h2>
@@ -54,11 +65,12 @@
         <button class="button__replay" id="buttonReplay">Новая игра</button>
     </div>
 
-
+    <script src="js/UI.js" type="module"></script>
+    <script src="js/taskGen.js" type="module"></script>
     <script src="js/utils.js"></script>
-    <script src="js/tikTakBoom.js"></script>
-    <script src="js/tikTakBoomTasks.js"></script>
-    <script src="js/script.js"></script>
+    <script src="js/game.js" type="module"></script>
+    <script src="Tasks.js" type="text/javascript"></script>
+    <script src="js/script.js" type="module"></script>
 </body>
 
 </html>

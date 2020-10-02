@@ -1,3 +1,5 @@
+import { game } from "./game.js";
+
 //Модуль работы с интерфейсом
 const startScreen = document.querySelector('.screen-start');
 const statusBar = document.querySelector('#gameStatusField');
@@ -5,22 +7,25 @@ const timerField = document.querySelector('#timerField');
 const playersBar = document.querySelector('#playersBar');
 const questionField = document.querySelector('#questionField');
 const questionBlock = document.querySelector('#questionBlock');
+const screenFinish = document.querySelector('#screenFinish');
+const textFinish = document.querySelector('#textFinish');
+const buttonReplay = document.querySelector('#buttonReplay');
 
 
 //Показать начальный экран
 export const startScreenShow = () =>{
     startScreen.classList.toggle('screen-start__show', true); 
-};
+}
 
 //Скрыть начальный экран
 export const startScreenHide = () =>{
     startScreen.classList.toggle('screen-start__show', false); 
-};
+}
 
 //Изменение надписи в статус-баре
 export const statusBarChange = (text) =>{
     statusBar.innerText = text;
-};
+}
 
 //Перерисовка таймера
 export const timerFieldRefresh = (time) =>{
@@ -36,7 +41,7 @@ export const timerFieldRefresh = (time) =>{
     } else {
         timerField.classList.toggle('timer-output_red', false);
     };
-};
+}
 
 //Мигание таймера зеленым цветом
 export const timerGreenFlash = () =>{
@@ -44,7 +49,7 @@ export const timerGreenFlash = () =>{
     setTimeout(() => {
         timerField.classList.toggle('timer-output_green', false);
     }, 250);
-};
+}
 
 //Мигание таймера оранжевым цветом
 export const timerOrangeFlash = () =>{
@@ -52,7 +57,7 @@ export const timerOrangeFlash = () =>{
     setTimeout(() => {
         timerField.classList.toggle('timer-output_orange', false);
     }, 250);
-};
+}
 
 //Перерисовка панели игроков
 export const playersBarRefresh = (players) => {
@@ -65,7 +70,7 @@ export const playersBarRefresh = (players) => {
         }
         playersBar.append(newUl);
     })
-};
+}
 
 
 //Тип вопроса и соответсвующие эффекты
@@ -87,7 +92,7 @@ export const randomQuestionType = () =>{
         questionField.classList.toggle('questions__header_danger', true);
         questionType = 'danger';
     };
-};
+}
 
 //Изменение текста вопроса
 export const questionFieldChange = (text) =>{
@@ -127,13 +132,51 @@ export const printQuestion = (task, clickFunction) => {
 
         questionBlock.append(divAnswer);
 
-        divAnswer.addEventListener('click', () => clickFunction(answer[1].result));
+        divAnswer.addEventListener('click', () => game.turnOff(answer[1].result));
     };
-};
+}
 
 //удаление кнопок с ответами
 export const clearAnswers = () =>{
     [...document.querySelectorAll('.questions__answer')].forEach(node => {
         node.remove();
     });
-};
+}
+
+//Экран победы
+export const finishScreenWin = (playerName) =>{
+    textFinish.innerText = `${playerName}, `;
+    
+    screenFinish.classList.add('screen-finish__win_show');
+    textFinish.classList.add('text__win_show');
+
+    showReplayButton();
+}
+
+export const finishScreenLose = () =>{
+    screenFinish.classList.add('screen-finish__lose_show');
+    textFinish.classList.add('text__lose_show');
+
+    showReplayButton();
+}
+
+const showReplayButton = () =>{
+    setTimeout(() => {
+        buttonReplay.classList.add('show');
+    }, 6000);
+}
+
+//Вызов звука
+const boomSound = new Audio('../sound/Boom.mp3');
+const winSound = new Audio('../sound/Win.mp3');
+const timerSound = new Audio('../sound/Timer.mp3');
+const correctSound = new Audio('../sound/Correct.mp3');
+const ErrorSound = new Audio('../sound/Error.mp3');
+
+export const sound = {
+    boom: () =>{boomSound.play()},
+    win: () =>{winSound.play()},
+    tick: () =>{timerSound.play()},
+    correct: () =>{correctSound.play()},
+    error: () =>{ErrorSound.play()}
+}

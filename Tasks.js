@@ -1,4 +1,4 @@
-const tasks = `
+    const JSONTasks =`
     [
         {
             "question": "Где находится Никарагуа?",
@@ -72,14 +72,4 @@ const tasks = `
             "answer4": { "result": false, "value": "22 654 км" },
             "answer5": { "result": false, "value": "57 112 км" }
         }
-    ]
-`;
-
-// {
-//     "question": "",
-//     "answer1": { "result": true, "value": "" },
-//     "answer2": { "result": false, "value": "" },
-//     "answer3": { "result": false, "value": "" },
-//     "answer4": { "result": false, "value": "" },
-//     "answer5": { "result": false, "value": "" }
-// },
+    ]`

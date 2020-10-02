@@ -1,3 +1,6 @@
+import * as UI from './UI.js';
+import {game} from './game.js';
+
 const settings = window.localStorage;
 const inpRadio = document.querySelectorAll('input[type="radio"');
 
@@ -9,16 +12,15 @@ window.onload = function()
         el.checked = (settings.getItem(key) == "false") ? false : true;
     });
     
-    tikTakBoom.init();
-    document.querySelector('.screen-start').classList.add('screen-start__show');
- 
+    UI.startScreenShow();
 };
 
 // TODO перед стартом игры проверять JSON-файл на корректность
 //Старт игры
 document.querySelector('#startGame').addEventListener('click', () =>{
-    document.querySelector('.screen-start').classList.remove('screen-start__show');    
-    
+       
+    game.init();
+
     let playersCount;
     let timer;
 
@@ -28,7 +30,7 @@ document.querySelector('#startGame').addEventListener('click', () =>{
         if ((el.name == "timer") && (el.checked == true)){timer = parseInt(el.value)}
     });
 
-    const players = tikTakBoom.players;
+    const players = game.players;
     for (let i=1; i<=playersCount; i++){
         const player = {
             name: `Player ${i}`,
@@ -38,11 +40,12 @@ document.querySelector('#startGame').addEventListener('click', () =>{
         players.push(player);
     }
 
-    tikTakBoom.run();
+    game.run();
+    UI.startScreenHide();
 });
 
 //Прерывание игры
-stopGame.addEventListener('click', () => tikTakBoom.finish());
+stopGame.addEventListener('click', () => game.finish());
 
 //Автосохранения настроек
 window.addEventListener('unload', () =>{
