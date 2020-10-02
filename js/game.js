@@ -11,13 +11,12 @@ export const game = {
     },
 
     run() {
-        this.timerON = 1;
-
         this.playerName = this.players[0].name;
         this.playerLife = this.players[0].life;
         this.boomTimer = this.players[0].timer;
 
         this.waiting(3);
+
         UI.playersBarRefresh(this.players);
     },
 
@@ -44,7 +43,7 @@ export const game = {
     },
 
     whoNext(playerName) {
-
+        //ищется имя игрока, который должен быть следующим
         const index = this.players.findIndex(el => el.name == playerName);
         let nextIndex = (index < this.players.length - 1) ? index + 1 : 0;
         const nextName = this.players[nextIndex].name;
@@ -54,7 +53,10 @@ export const game = {
         this.players[index].timer = this.boomTimer;
         this.players = this.players.filter(player => (player.life > 0));
         
+        //после отсева "мертвых", обновляется индекс следующего игрока
         nextIndex = this.players.findIndex(el => el.name == nextName);
+
+        if (this.players.length == 1){nextIndex = 0};
 
         //Вызываются параметры следующего игрока
         this.playerName = this.players[nextIndex].name;
@@ -72,12 +74,12 @@ export const game = {
             if (UI.questionType == 'gold') {
                 this.finish('won', this.playerName);
                 return false;
-            }
+            };
             //Отдельная инструкция для победы в режиме пенальти
             if ((this.players.length == 1)) {
                 this.finish('won', this.players[0].name);
                 return false;
-            }
+            };
             //При верном ответе добавляется 5 секунд
             UI.sound.correct();
             UI.timerGreenFlash();
@@ -88,12 +90,12 @@ export const game = {
             if (UI.questionType == 'danger') {
                 this.finish();
                 return false;
-            }
+            };
 
             if ((this.players.length == 1) && (this.playerLife == 0)) {
                 this.finish();
                 return false;
-            }
+            };
 
             //При неправильном ответе отнимается 5 секунд
             UI.sound.error();
@@ -105,15 +107,17 @@ export const game = {
                 UI.questionFieldChange(`Время ${this.playerName} закончилось!`);
                 this.boomTimer = 0;
                 this.playerLife = 0;
-            }
+            };
 
             //и отбирается одна жизнь. Если режим пенальти, то отбираются все жизни.
             if (taskGen.taskType =='JSON'){
                 this.playerLife -= 1;
             }else{
                 this.playerLife = 0;
-            }
-        }
+            };
+        };
+
+        UI.timerFieldRefresh(this.boomTimer);
 
         this.whoNext(this.playerName);
 
