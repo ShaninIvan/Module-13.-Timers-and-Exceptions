@@ -52,6 +52,7 @@ export const getTask = () =>{
         taskType = 'JSON';
         return taskFromJSON();
     }else{
+        taskType = 'random';
         return taskFromRandom();
     };
 }
