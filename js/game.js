@@ -13,6 +13,8 @@ export const game = {
         this.playerLife = this.players[0].life;
         this.boomTimer = this.players[0].timer;
 
+        this.penaltyStatus = 0;
+
         this.waiting(3);
 
         UI.playersBarRefresh(this.players);
@@ -36,6 +38,7 @@ export const game = {
         UI.statusBarChange(` Вопрос к ${this.playerName}`);
 
         const task = taskGen.getTask();
+
         UI.randomQuestionType();
         UI.printQuestion(task);
     },
@@ -117,9 +120,15 @@ export const game = {
 
         };
 
+        this.whoNext(this.playerName);
+
+        if (taskGen.taskType == 'random'){
+            this.penalty();
+        }
+
         UI.timerFieldRefresh(this.boomTimer);
 
-        this.whoNext(this.playerName);
+        
 
         UI.playersBarRefresh(this.players);
 
@@ -130,6 +139,23 @@ export const game = {
 
         this.waiting(3);
 
+    },
+
+    penalty(){
+        if (this.penaltyStatus == 1) return false;
+
+        UI.questionFieldChange('ПЕНАЛЬТИ! Остаются только игроки с наибольшим количеством жизней!');
+
+        let lifes = [];
+        this.players.forEach(player => lifes.push(player.life));
+        this.players = this.players.filter(player => player.life == Math.max(...lifes));
+        UI.playersBarRefresh;
+
+        this.playerName = this.players[0].name;
+        this.playerLife = this.players[0].life;
+        this.boomTimer = this.players[0].timer;
+
+        this.penaltyStatus = 1;
     },
 
     finish(result = 'lose', playerName) {

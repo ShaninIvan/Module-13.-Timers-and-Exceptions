@@ -52,7 +52,6 @@ export const getTask = () =>{
         taskType = 'JSON';
         return taskFromJSON();
     }else{
-        taskType = 'random';
         return taskFromRandom();
     };
 }
@@ -61,6 +60,7 @@ const taskFromJSON = () =>{
     const taskNumber = randomIntNumber(tasks.length - 1);
     const task = tasks[taskNumber];
     tasks.splice(taskNumber, 1);
+    if (tasks.length == 0) taskType = 'random';
     return task;
 };
 
