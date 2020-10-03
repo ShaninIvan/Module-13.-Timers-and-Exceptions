@@ -5,8 +5,6 @@ export const game = {
     
     init() {
 
-        taskGen.JSONInit(JSONTasks);
-
         this.players = [];
     },
 

@@ -1,4 +1,5 @@
 import * as UI from './UI.js';
+import * as taskGen from './taskGen.js';
 import {game} from './game.js';
 
 const settings = window.localStorage;
@@ -18,7 +19,8 @@ window.onload = function()
 // TODO перед стартом игры проверять JSON-файл на корректность
 //Старт игры
 document.querySelector('#startGame').addEventListener('click', () =>{
-       
+    
+    if (taskGen.JSONInit(JSONTasks) == false) return false;
     game.init();
 
     let playersCount;
