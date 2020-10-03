@@ -71,5 +71,38 @@
             "answer3": { "result": false, "value": "38 996 км" },
             "answer4": { "result": false, "value": "22 654 км" },
             "answer5": { "result": false, "value": "57 112 км" }
+        },
+        {
+            "question": "Какой линкор относится к тому же типу, что и Ямато?",
+            "answer1": { "result": true, "value": "Мусаси" },
+            "answer2": { "result": false, "value": "Фусо" },
+            "answer3": { "result": false, "value": "Нагато" },
+            "answer4": { "result": false, "value": "Микаса" },
+            "answer5": { "result": false, "value": "Исэ" }
+        },
+        {
+            "question": "Как называется религиозный учитель в буддизме?",
+            "answer1": { "result": true, "value": "Лама" },
+            "answer2": { "result": false, "value": "Будда" },
+            "answer3": { "result": false, "value": "Имам" },
+            "answer4": { "result": false, "value": "Монах" },
+            "answer5": { "result": false, "value": "Патриарх" }
+        },
+        {
+            "question": "В каком году случилась Великая французская революция?",
+            "answer1": { "result": true, "value": "1789 г." },
+            "answer2": { "result": false, "value": "1917 г." },
+            "answer3": { "result": false, "value": "1865 г." },
+            "answer4": { "result": false, "value": "2014 г." },
+            "answer5": { "result": false, "value": "1939 г." }
         }
     ]`
+
+    // {
+    //     "question": "",
+    //     "answer1": { "result": true, "value": "" },
+    //     "answer2": { "result": false, "value": "" },
+    //     "answer3": { "result": false, "value": "" },
+    //     "answer4": { "result": false, "value": "" },
+    //     "answer5": { "result": false, "value": "" }
+    // },
